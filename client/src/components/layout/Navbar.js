@@ -6,6 +6,7 @@ const Navbar = ()  => {
       <h1>
         <a href="index.html"><i className="fas fa-code"></i> DevConnector</a>
       </h1>
+      <h2>hello</h2>
       <ul>
         <li><a href="profiles.html">Developers</a></li>
         <li><a href="register.html">Register</a></li>
