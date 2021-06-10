@@ -216,22 +216,20 @@ router.put(
 //* @access   Private
 router.delete("/experience/:exp_id", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
-
-    // Get remove index
-    const removeIndex = profile.experience
-      .map((item) => item.id)
-      .indexOf(req.params.exp_id);
-
-    profile.experience.splice(removeIndex, 1);
-
-    await profile.save();
-
-    res.json(profile);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
+    const foundProfile = await Profile.findOne({ user: req.user.id });
+    const eduIds = foundProfile.experience.map(edu => edu._id.toString());
+    const removeIndex = eduIds.indexOf(req.params.edu_id);
+    if (removeIndex === -1) {
+        return res.status(500).json({ msg: "Server error" });
+    } else { 
+        foundProfile.experience.splice(removeIndex,1);
+        await foundProfile.save();
+        res.json({ msg: 'Experience Deleted'})
+    }
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: "Server error" });
+}
 });
 
 //* @route    PUT api/profile/education
@@ -285,22 +283,20 @@ router.put(
 //* @access   Private
 router.delete("/education/:edu_id", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
-
-    // Get remove index
-    const removeIndex = profile.education
-      .map((item) => item.id)
-      .indexOf(req.params.edu_id);
-
-    profile.education.splice(removeIndex, 1);
-
-    await profile.save();
-
-    res.json(profile);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
+    const foundProfile = await Profile.findOne({ user: req.user.id });
+    const eduIds = foundProfile.education.map(edu => edu._id.toString());
+    const removeIndex = eduIds.indexOf(req.params.edu_id);
+    if (removeIndex === -1) {
+        return res.status(500).json({ msg: "Server error" });
+    } else { 
+        foundProfile.education.splice(removeIndex,1);
+        await foundProfile.save();
+        res.json({ msg: 'Education Deleted'})
+    }
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: "Server error" });
+}
 });
 
 //* @route    GET api/profile/github/:username
